@@ -1,0 +1,28 @@
+[
+  {
+    "name": "get_schema",
+    "description": "Gets the postgres database schema",
+    "parameters": {
+      "type": "object",
+      "properties": {}
+    },
+    "agent": true
+  },
+  {
+    "name": "execute_query",
+    "description": "Execute the query",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Postgres query to execute"
+        }
+      },
+      "required": [
+        "query"
+      ]
+    },
+    "agent": true
+  }
+]

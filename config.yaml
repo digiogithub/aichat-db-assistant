@@ -1,0 +1,87 @@
+# ---- llm ----
+model: groq:llama-3.1-70b-versatile
+temperature: 0.5 # Set default temperature parameter
+top_p: 0 # Set default top-p parameter, range (0, 1)
+
+# ---- behavior ----
+stream: true # Controls whether to use the stream-style API.
+save: true # Indicates whether to persist the message
+keybindings: emacs # Choose keybinding style (emacs, vi)
+editor: micro # Specifies the command used to edit input buffer or session. (e.g. vim, emacs, nano).
+wrap: no # Controls text wrapping (no, auto, <max-width>)
+wrap_code: false # Enables or disables wrapping of code blocks
+
+# ---- function-calling ----
+# Visit https://github.com/sigoden/llm-functions for setup instructions
+function_calling: true # Enables or disables function calling (Globally).
+mapping_tools: # Alias for a tool or toolset
+  fs: "fs_cat,fs_ls"
+use_tools: null # Which tools to use by default. (e.g. 'fs,web_search')
+
+# ---- prelude ----
+prelude: null # Set a default role or session to start with (e.g. role:<name>, session:<name>)
+repl_prelude: null # Overrides the `prelude` setting specifically for conversations started in REPL
+agent_prelude: null # Set a session to use when starting a agent. (e.g. temp, default)
+
+# ---- session ----
+# Controls the persistence of the session. if true, auto save; if false, not save; if null, asking the user
+save_session: null
+# Compress session when token count reaches or exceeds this threshold
+compress_threshold: 4000
+# Text prompt used for creating a concise summary of session message
+summarize_prompt: "Summarize the discussion briefly in 200 words or less to use as a prompt for future context."
+# Text prompt used for including the summary of the entire session
+summary_prompt: "This is a summary of the chat history as a recap: "
+
+# ---- RAG ----
+# See [RAG-Guide](https://github.com/sigoden/aichat/wiki/RAG-Guide) for more details.
+
+rag_embedding_model: "github:text-embedding-3-small"
+
+rag_reranker_model: null # Specifies the rerank model to use
+rag_top_k: 4 # Specifies the number of documents to retrieve
+rag_chunk_size: null # Specifies the chunk size
+rag_chunk_overlap: null # Specifies the chunk overlap
+rag_min_score_vector_search: 0 # Specifies the minimum relevance score for vector-based searching
+rag_min_score_keyword_search: 0 # Specifies the minimum relevance score for keyword-based searching
+# Defines the query structure using variables like __CONTEXT__ and __INPUT__ to tailor searches to specific needs
+rag_template: |
+  Use the following context as your learned knowledge, inside <context></context> XML tags.
+  <context>
+  __CONTEXT__
+  </context>
+
+  When answer to user:
+  - If you don't know, just say that you don't know.
+  - If you don't know when you are not sure, ask for clarification.
+  Avoid mentioning that you obtained the information from the context.
+  And answer according to the language of the user's question.
+
+  Given the context information, answer the query.
+  Query: __INPUT__
+# Define document loaders to control how RAG and `.file`/`--file` load files of specific formats.
+document_loaders:
+  # You can add custom loaders using the following syntax:
+  #   <file-extension>: <command-to-load-the-file>
+  # Note: Use `$1` for input file and `$2` for output file. If `$2` is omitted, use stdout as output.
+  pdf: "pdftotext $1 -" # Load .pdf file, see https://poppler.freedesktop.org to set up pdftotext
+  docx: "pandoc --to plain $1" # Load .docx file, see https://pandoc.org to set up pandoc
+
+# ---- apperence ----
+highlight: true # Controls syntax highlighting
+light_theme: false # Activates a light color theme when true. env: AICHAT_LIGHT_THEME
+# Custom REPL left/right prompts, see https://github.com/sigoden/aichat/wiki/Custom-REPL-Prompt for more details
+left_prompt: "{color.green}{?session {?agent {agent}>}{session}{?role /}}{!session {?agent {agent}>}}{role}{?rag @{rag}}{color.cyan}{?session )}{!session >}{color.reset} "
+right_prompt: "{color.purple}{?session {?consume_tokens {consume_tokens}({consume_percent}%)}{!consume_tokens {consume_tokens}}}{color.reset}"
+
+# ---- misc ----
+serve_addr: 127.0.0.1:8000 # Default serve listening address
+
+# ---- clients ----
+
+clients:
+
+  # See https://docs.anthropic.com/claude/reference/getting-started-with-the-api
+  - type: claude
+    api_base: https://api.anthropic.com/v1            # Optional
+    api_key: # Here you can put your API key
