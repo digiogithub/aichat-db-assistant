@@ -4,7 +4,8 @@ This repo contains the agents configuration for aichat compatible with PostgresS
 
 ## Installation
 
-1. Copy the folder agents/* into your aichat folder `functions/agents/`.
+1. Copy the folder agents/* into your aichat folder `functions/agents/`. And into each folder execute `npm install`.
+
 2. Add the new agents into the `functions/agents.txt` file.
 
 ```
