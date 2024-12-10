@@ -12,7 +12,7 @@ pg-assistant
 my-assistant
 ```
 
-3. expoorts the following environment variables in your .bashrc or .bash_profile file.
+3. exports the following environment variables in your .bashrc or .bash_profile file.
 
 ```
 export PG_ASSISTANT_DB_HOST=host
